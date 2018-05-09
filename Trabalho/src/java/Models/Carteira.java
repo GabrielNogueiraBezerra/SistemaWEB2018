@@ -1,5 +1,6 @@
 package Models;
 
+import DAO.CarteiraDAO;
 import java.sql.SQLException;
 
 /**
@@ -49,22 +50,36 @@ public class Carteira implements InterfaceManipulable {
 
     @Override
     public void save() throws SQLException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (this.validade != null && this.valorSaldo >= 0.0) {
+            if (this.id == 0) {
+                CarteiraDAO.getInstancia().save(this);
+            } else {
+                this.update();
+            }
+        }
     }
 
     @Override
     public void update() throws SQLException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (this.id > 0) {
+            CarteiraDAO.getInstancia().update(this);
+        }
     }
 
     @Override
     public void find(int codigo) throws SQLException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(codigo > 0){
+            this.id = codigo;
+            
+            CarteiraDAO.getInstancia().find(this);
+        }
     }
 
     @Override
     public void delete() throws SQLException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(this.id > 0){
+            CarteiraDAO.getInstancia().delete(this);
+        }
     }
 
 }

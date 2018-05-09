@@ -1,5 +1,6 @@
 package Models;
 
+import DAO.ValidacaoDAO;
 import java.sql.SQLException;
 
 /**
@@ -57,22 +58,34 @@ public class Validacao implements InterfaceManipulable {
 
     @Override
     public void save() throws SQLException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (this.login != null && this.senha != null) {
+            if (this.id == 0) {
+                ValidacaoDAO.getInstancia().save(this);
+            } else {
+                this.update();
+            }
+        }
     }
 
     @Override
     public void update() throws SQLException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (this.id > 0) {
+            ValidacaoDAO.getInstancia().update(this);
+        }
     }
 
     @Override
     public void find(int codigo) throws SQLException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (codigo > 0) {
+            ValidacaoDAO.getInstancia().find(this);
+        }
     }
 
     @Override
     public void delete() throws SQLException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (this.id > 0) {
+            ValidacaoDAO.getInstancia().delete(this);
+        }
     }
 
 }

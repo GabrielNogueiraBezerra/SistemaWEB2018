@@ -103,7 +103,7 @@ public class AlimentoDAO {
             CategoriaAlimento categoriaAlimento = new CategoriaAlimento(0, "");
             categoriaAlimento.find(result.getInt(""));
             alimento.setCategoriaAlimento(categoriaAlimento);
-            alimento.setNomeCategoria(result.getString(""));
+            alimento.setNome(result.getString(""));
             
         }finally{
             ConnectionFactory.closeConnection(conexao, stmt);
