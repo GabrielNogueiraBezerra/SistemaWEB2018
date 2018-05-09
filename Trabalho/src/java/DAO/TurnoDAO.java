@@ -5,11 +5,13 @@
  */
 package DAO;
 
+import Models.Alimento;
 import Models.Turno;
 import conexao.ConnectionFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -36,13 +38,43 @@ public class TurnoDAO {
             stmt.setString(1, turno.getNomeTurno());
             
             stmt.executeUpdate();
+            
+            for(Alimento alimento : turno.getAlimentos()){
+                stmt = conexao.prepareStatement("");
+                stmt.setInt(1, turno.getId());
+                stmt.setInt(2, alimento.getId());
+                stmt.executeUpdate();
+            }
         }finally{
             ConnectionFactory.closeConnection(conexao, stmt);
         }
     }
     
     public void update(Turno turno) throws SQLException, ClassNotFoundException{
+        Connection conexao = dao.getConnection();
+        PreparedStatement stmt = null;
         
+        try{
+            stmt = conexao.prepareStatement("");
+            stmt.setInt(1, turno.getId());
+            stmt.setString(2, turno.getNomeTurno());
+            
+            stmt.executeUpdate();
+            
+            ArrayList<Alimento> listaAlimentos = AlimentoDAO.getInstancia().getAlimentos();
+            
+            for(Alimento alimento : turno.getAlimentos()){
+                stmt = conexao.prepareStatement("");
+                
+                //if(){
+                    stmt.setInt(1, turno.getId());
+                    stmt.setInt(2, alimento.getId());
+                    stmt.executeUpdate();
+                //}
+            }
+        }finally{
+            ConnectionFactory.closeConnection(conexao, stmt);
+        }
     }
     
     public void find(Turno turno) throws SQLException, ClassNotFoundException{

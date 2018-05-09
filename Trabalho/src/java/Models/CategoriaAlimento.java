@@ -11,6 +11,10 @@ public class CategoriaAlimento implements InterfaceManipulable{
     private int id;
     private String nomeCategoria;
     
+    public CategoriaAlimento(){
+        
+    }
+    
     public CategoriaAlimento(int id, String nomeCategoria){
         this.id = id;
         this.nomeCategoria = nomeCategoria;

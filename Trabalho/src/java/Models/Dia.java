@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * @author Gabriel
  */
 public class Dia implements InterfaceManipulable {
-
+    private int id;
     private Date data;
     private ArrayList<Turno> turnos;
 
@@ -17,6 +17,16 @@ public class Dia implements InterfaceManipulable {
         this.data = data;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        if(id >= 0){
+            this.id = id;
+        }
+    }
+    
     public Date getData() {
         return data;
     }
@@ -51,22 +61,22 @@ public class Dia implements InterfaceManipulable {
 
     @Override
     public void save() throws SQLException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
     public void update() throws SQLException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
     public void find(int codigo) throws SQLException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
     public void delete() throws SQLException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
 }

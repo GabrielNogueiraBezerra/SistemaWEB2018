@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -29,6 +30,33 @@ public class AlimentoDAO {
         return instancia;
     }
     
+    public ArrayList<Alimento> getAlimentos() throws SQLException, ClassNotFoundException{
+        Connection conexao = dao.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet result = null;
+        ArrayList<Alimento> alimentos = new ArrayList<>();
+        
+        try{
+            stmt = conexao.prepareStatement("");
+            while(result.next()){
+                Alimento alimento = new Alimento();
+                
+                alimento.setId(result.getInt(""));
+                alimento.setNome(result.getString(""));
+                alimento.setQuantidadeCalorias(result.getFloat(""));
+                alimento.setQuantidadeCarboidratos(result.getFloat(""));
+                alimento.setQuantidadeFibras(result.getFloat(""));
+                
+                CategoriaAlimento categoria = new CategoriaAlimento();
+                categoria.find(result.getInt(""));
+                alimento.setCategoriaAlimento(categoria);
+                alimentos.add(alimento);
+            }
+        }finally{
+            ConnectionFactory.closeConnection(conexao, stmt);
+            return alimentos;
+        }
+    }
     
     public void save(Alimento alimento) throws SQLException, ClassNotFoundException{
         Connection conexao = dao.getConnection();
