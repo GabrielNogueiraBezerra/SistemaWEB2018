@@ -28,7 +28,7 @@ public class PerfilDAO {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         try {
-            stmt = conexao.prepareStatement("");
+            stmt = conexao.prepareStatement("INSERT INTO PERFIL (DESCRICAO, VALOR) VALUES (?, ?)");
             stmt.setString(1, perfil.getDescricao());
             stmt.setFloat(2, perfil.getValor());
             stmt.executeUpdate();
@@ -41,7 +41,7 @@ public class PerfilDAO {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         try {
-            stmt = conexao.prepareStatement("");
+            stmt = conexao.prepareStatement("UPDATE PERFIL SET DESCRICAO = ?, VALOR = ? WHERE ID = ?");
             stmt.setString(1, perfil.getDescricao());
             stmt.setFloat(2, perfil.getValor());
             stmt.setInt(3, perfil.getId());
@@ -55,7 +55,7 @@ public class PerfilDAO {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         try {
-            stmt = conexao.prepareStatement("");
+            stmt = conexao.prepareStatement("DELETE FROM PERFIL WHERE ID = ?");
             stmt.setInt(1, perfil.getId());
             stmt.executeUpdate();
         } finally {
@@ -68,13 +68,13 @@ public class PerfilDAO {
         PreparedStatement stmt = null;
         ResultSet result = null;
         try {
-            stmt = conexao.prepareStatement("");
+            stmt = conexao.prepareStatement("SELECT VALOR, DESCRICAO FROM PERFIL WHERE ID = ?");
             stmt.setInt(1, perfil.getId());
-            stmt.executeQuery();
-
-            perfil.setDescricao(result.getString(""));
-            perfil.setValor(result.getFloat(""));
-
+            result = stmt.executeQuery();
+            while (result.next()) {
+                perfil.setDescricao(result.getString("DESCRICAO"));
+                perfil.setValor(result.getFloat("VALOR"));
+            }
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
