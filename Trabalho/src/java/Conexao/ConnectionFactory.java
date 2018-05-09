@@ -1,4 +1,5 @@
 package conexao;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -8,20 +9,21 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ConnectionFactory {
+
     private static ConnectionFactory instancia;
     private final String DRIVE = "com.mysql.jdbc.Driver";
-    private final String URL = "jdbc:mysql://localhost/restaurante"; 
+    private final String URL = "jdbc:mysql://localhost/bancoweb/";
     private final String USER = "root";
     private final String PASSWORD = "";
 
     public static ConnectionFactory getInstancia() {
-        if(instancia == null){
+        if (instancia == null) {
             instancia = new ConnectionFactory();
         }
         return instancia;
     }
 
-    public Connection getConnection(){
+    public Connection getConnection() {
         try {
             Class.forName(DRIVE);
             return DriverManager.getConnection(URL, USER, PASSWORD);
@@ -30,17 +32,17 @@ public class ConnectionFactory {
         }
     }
 
-    public static void closeConnection(Connection con){
+    public static void closeConnection(Connection con) {
         try {
-            if(con != null){
+            if (con != null) {
                 con.close();
             }
         } catch (SQLException ex) {
             Logger.getLogger(ConnectionFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public static void closeConnection(Connection con,PreparedStatement stmt){
+
+    public static void closeConnection(Connection con, PreparedStatement stmt) {
         closeConnection(con);
         try {
             if (stmt != null) {
@@ -48,10 +50,10 @@ public class ConnectionFactory {
             }
         } catch (SQLException ex) {
             Logger.getLogger(ConnectionFactory.class.getName()).log(Level.SEVERE, null, ex);
-        }   
+        }
     }
-    
-    public static void closeConnection(Connection con,PreparedStatement stmt, ResultSet rs){
+
+    public static void closeConnection(Connection con, PreparedStatement stmt, ResultSet rs) {
         closeConnection(con, stmt);
         try {
             if (rs != null) {
@@ -59,6 +61,6 @@ public class ConnectionFactory {
             }
         } catch (SQLException ex) {
             Logger.getLogger(ConnectionFactory.class.getName()).log(Level.SEVERE, null, ex);
-        }  
+        }
     }
 }
