@@ -8,7 +8,7 @@ import java.sql.SQLException;
  *
  * @author Gabriel
  */
-public class Item implements InterfaceManipulable{
+public class Item implements InterfaceManipulable {
 
     private int id;
     private int idHistorico;
@@ -63,10 +63,10 @@ public class Item implements InterfaceManipulable{
 
     @Override
     public void save() throws SQLException, ClassNotFoundException {
-        if(this.data != null && this.idHistorico > 0 && this.periodo != null){
-            if(this.id == 0){
+        if (this.data != null && this.idHistorico > 0 && this.periodo != null) {
+            if (this.id == 0) {
                 ItemDAO.getInstancia().save(this);
-            }else{
+            } else {
                 this.update();
             }
         }
@@ -74,17 +74,24 @@ public class Item implements InterfaceManipulable{
 
     @Override
     public void update() throws SQLException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (this.id > 0) {
+            ItemDAO.getInstancia().update(this);
+        }
     }
 
     @Override
     public void find(int codigo) throws SQLException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (codigo > 0) {
+            this.id = codigo;
+            ItemDAO.getInstancia().find(this);
+        }
     }
 
     @Override
     public void delete() throws SQLException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (this.id > 0) {
+            ItemDAO.getInstancia().delete(this);
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 package DAO;
 
+import Models.Historico;
 import Models.Item;
 import conexao.ConnectionFactory;
 import java.sql.Connection;
@@ -77,6 +78,26 @@ public class ItemDAO {
             item.setData(result.getDate(""));
             item.setIdHistorico(result.getInt(""));
             item.setPeriodo(result.getString(""));
+
+        } finally {
+            ConnectionFactory.closeConnection(conexao, stmt);
+        }
+    }
+
+    public void find(Historico historico) throws SQLException, ClassNotFoundException {
+        Connection conexao = dao.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet result = null;
+        try {
+            stmt = conexao.prepareStatement("");
+            stmt.setInt(1, historico.getId());
+            stmt.executeQuery();
+
+            while (result.next()) {
+                Item item = new Item(result.getInt(""), result.getDate(""), result.getString(""));
+                item.setId(result.getInt(""));
+                historico.addItem(item);
+            }
 
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
