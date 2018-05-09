@@ -1,12 +1,14 @@
 package Models;
 
+import DAO.AlimentoDAO;
 import java.sql.SQLException;
 
 /**
  *
  * @author Gabriel
  */
-public class Alimento implements InterfaceManipulable{
+public class Alimento implements InterfaceManipulable {
+
     private int id;
     private String nome;
     private CategoriaAlimento categoriaAlimento;
@@ -19,7 +21,7 @@ public class Alimento implements InterfaceManipulable{
     }
 
     public void setId(int id) {
-        if(id >= 0){
+        if (id >= 0) {
             this.id = id;
         }
     }
@@ -29,7 +31,7 @@ public class Alimento implements InterfaceManipulable{
     }
 
     public void setNome(String nome) {
-        if(nome != null){
+        if (nome != null) {
             this.nome = nome;
         }
     }
@@ -39,7 +41,7 @@ public class Alimento implements InterfaceManipulable{
     }
 
     public void setCategoriaAlimento(CategoriaAlimento categoriaAlimento) {
-        if(categoriaAlimento != null){
+        if (categoriaAlimento != null) {
             this.categoriaAlimento = categoriaAlimento;
         }
     }
@@ -49,7 +51,7 @@ public class Alimento implements InterfaceManipulable{
     }
 
     public void setQuantidadeFibras(float quantidadeFibras) {
-        if(quantidadeFibras >= 0){
+        if (quantidadeFibras >= 0) {
             this.quantidadeFibras = quantidadeFibras;
         }
     }
@@ -59,7 +61,7 @@ public class Alimento implements InterfaceManipulable{
     }
 
     public void setQuantidadeCalorias(float quantidadeCalorias) {
-        if(quantidadeCalorias >= 0){
+        if (quantidadeCalorias >= 0) {
             this.quantidadeCalorias = quantidadeCalorias;
         }
     }
@@ -69,31 +71,43 @@ public class Alimento implements InterfaceManipulable{
     }
 
     public void setQuantidadeCarboidratos(float quantidadeCarboidratos) {
-        if(quantidadeCarboidratos >= 0){
+        if (quantidadeCarboidratos >= 0) {
             this.quantidadeCarboidratos = quantidadeCarboidratos;
         }
     }
-    
-    
-    
+
     @Override
     public void save() throws SQLException, ClassNotFoundException {
-        
+        if (this.categoriaAlimento != null && this.nome != null && this.quantidadeCalorias >= 0.0 && this.quantidadeCarboidratos >= 0.0 && this.quantidadeFibras >= 0.0) {
+            if (this.id == 0) {
+                AlimentoDAO.getInstancia().save(this);
+            } else {
+                this.update();
+            }
+        }
     }
 
     @Override
     public void update() throws SQLException, ClassNotFoundException {
-        
+        if (this.id > 0) {
+            AlimentoDAO.getInstancia().update(this);
+        }
     }
 
     @Override
     public void find(int codigo) throws SQLException, ClassNotFoundException {
-        
+        if (codigo > 0) {
+            this.id = codigo;
+
+            AlimentoDAO.getInstancia().find(this);
+        }
     }
 
     @Override
     public void delete() throws SQLException, ClassNotFoundException {
-        
+        if (this.id > 0) {
+            AlimentoDAO.getInstancia().delete(this);
+        }
     }
-    
+
 }
