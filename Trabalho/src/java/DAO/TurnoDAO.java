@@ -33,7 +33,7 @@ public class TurnoDAO {
         
         try{
             stmt = conexao.prepareStatement("");
-            stmt.setString(1, turno.getNomeTurno());
+            //stmt.setString(1, turno.getNomeTurno());
             
             stmt.executeUpdate();
         }finally{

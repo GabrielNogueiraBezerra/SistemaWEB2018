@@ -11,8 +11,11 @@ import java.util.logging.Logger;
 public class ConnectionFactory {
 
     private static ConnectionFactory instancia;
-    private final String DRIVE = "com.mysql.jdbc.Driver";
-    private final String URL = "jdbc:mysql://localhost/bancoweb/";
+    private final String DATABASE = "bancoweb";
+    private final String HOST = "localhost";
+    private final String DRIVE = "com.mysql.cj.jdbc.Driver";
+    private final String URL = "jdbc:mysql://" + HOST
+            + "/" + DATABASE + "?useTimezone=true&serverTimezone=UTC";
     private final String USER = "root";
     private final String PASSWORD = "";
 
