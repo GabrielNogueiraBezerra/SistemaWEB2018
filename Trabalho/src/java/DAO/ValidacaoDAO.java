@@ -28,7 +28,7 @@ public class ValidacaoDAO {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         try {
-            stmt = conexao.prepareStatement("");
+            stmt = conexao.prepareStatement("INSERT INTO `validacao`(`login`, `senha`) VALUES (?, ?)");
             stmt.setString(1, validacao.getLogin());
             stmt.setString(2, validacao.getSenha());
             stmt.executeUpdate();
@@ -41,7 +41,7 @@ public class ValidacaoDAO {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         try {
-            stmt = conexao.prepareStatement("");
+            stmt = conexao.prepareStatement("UPDATE `validacao` SET `login` = ?,`senha` = ? WHERE `id` = ?");
             stmt.setString(1, validacao.getLogin());
             stmt.setString(2, validacao.getSenha());
             stmt.setInt(3, validacao.getId());
@@ -55,7 +55,7 @@ public class ValidacaoDAO {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         try {
-            stmt = conexao.prepareStatement("");
+            stmt = conexao.prepareStatement("DELETE FROM `validacao` WHERE `id` = ?");
             stmt.setInt(1, validacao.getId());
             stmt.executeUpdate();
         } finally {
@@ -68,12 +68,12 @@ public class ValidacaoDAO {
         PreparedStatement stmt = null;
         ResultSet result = null;
         try {
-            stmt = conexao.prepareStatement("");
+            stmt = conexao.prepareStatement("SELECT LOGIN, SENHA FROM VALIDACAO WHERE ID = ?");
             stmt.setInt(1, validacao.getId());
             stmt.executeQuery();
 
-            validacao.setLogin(result.getString(""));
-            validacao.setSenha(result.getString(""));
+            validacao.setLogin(result.getString("LOGIN"));
+            validacao.setSenha(result.getString("SENHA"));
 
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);

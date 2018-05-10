@@ -28,7 +28,7 @@ public class CarteiraDAO {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         try {
-            stmt = conexao.prepareStatement("");
+            stmt = conexao.prepareStatement("INSERT INTO CARTEIRA (VALIDADE, SALDO) VALUES (?, ?)");
             stmt.setString(1, carteira.getValidade());
             stmt.setFloat(2, carteira.getValorSaldo());
             stmt.executeUpdate();
@@ -41,7 +41,7 @@ public class CarteiraDAO {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         try {
-            stmt = conexao.prepareStatement("");
+            stmt = conexao.prepareStatement("UPDATE CARTEIRA SET VALIDADE = ?, SALDO = ? WHERE ID = ?");
             stmt.setString(1, carteira.getValidade());
             stmt.setFloat(2, carteira.getValorSaldo());
             stmt.setInt(3, carteira.getId());
@@ -55,7 +55,7 @@ public class CarteiraDAO {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         try {
-            stmt = conexao.prepareStatement("");
+            stmt = conexao.prepareStatement("DELETE FROM CARTEIRA WHERE ID = ?");
             stmt.setInt(1, carteira.getId());
             stmt.executeUpdate();
         } finally {
@@ -68,12 +68,12 @@ public class CarteiraDAO {
         PreparedStatement stmt = null;
         ResultSet result = null;
         try {
-            stmt = conexao.prepareStatement("");
+            stmt = conexao.prepareStatement("SELECT VALIDADE, SALDO FROM CARTEIRA WHERE ID = ?");
             stmt.setInt(1, carteira.getId());
             stmt.executeQuery();
 
-            carteira.setValidade(result.getString(""));
-            carteira.setValorSaldo(result.getFloat(""));
+            carteira.setValidade(result.getString("VALIDADE"));
+            carteira.setValorSaldo(result.getFloat("SALDO"));
 
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
