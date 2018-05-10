@@ -32,14 +32,14 @@ public class UsuarioDAO {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         try {
-            stmt = conexao.prepareStatement("");
-            stmt.setString(1, usuario.getNome());
-            stmt.setInt(2, usuario.getIdMatricula());
-            stmt.setInt(3, usuario.getCarteira().getId());
-            stmt.setInt(4, usuario.getHistorico().getId());
-            stmt.setInt(5, usuario.getPerfil().getId());
-            stmt.setInt(5, usuario.getValidacao().getId());
-            stmt.setBoolean(6, usuario.isAtivo());
+            stmt = conexao.prepareStatement("INSERT INTO `usuario`(`idMatricula`, `idValidacao`, `nome`, `idCarteira`, `idHistorico`, `idPerfil`, `ativo`) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            stmt.setInt(1, usuario.getIdMatricula());
+            stmt.setInt(2, usuario.getValidacao().getId());
+            stmt.setString(3, usuario.getNome());
+            stmt.setInt(4, usuario.getCarteira().getId());
+            stmt.setInt(5, usuario.getHistorico().getId());
+            stmt.setInt(6, usuario.getPerfil().getId());
+            stmt.setBoolean(7, usuario.isAtivo());
             stmt.executeUpdate();
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
@@ -50,15 +50,15 @@ public class UsuarioDAO {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         try {
-            stmt = conexao.prepareStatement("");
-            stmt.setString(1, usuario.getNome());
-            stmt.setInt(2, usuario.getIdMatricula());
-            stmt.setInt(3, usuario.getCarteira().getId());
-            stmt.setInt(4, usuario.getHistorico().getId());
-            stmt.setInt(5, usuario.getPerfil().getId());
-            stmt.setInt(5, usuario.getValidacao().getId());
-            stmt.setBoolean(6, usuario.isAtivo());
-            stmt.setInt(7, usuario.getId());
+            stmt = conexao.prepareStatement("UPDATE `usuario` SET `idMatricula` = ?,`idValidacao` = ?,`nome` = ?,`idCarteira` = ?,`idHistorico` = ?, `idPerfil` = ?,`ativo` = ? WHERE `id` = ?");
+            stmt.setInt(1, usuario.getIdMatricula());
+            stmt.setInt(2, usuario.getValidacao().getId());
+            stmt.setString(3, usuario.getNome());
+            stmt.setInt(4, usuario.getCarteira().getId());
+            stmt.setInt(5, usuario.getHistorico().getId());
+            stmt.setInt(6, usuario.getPerfil().getId());
+            stmt.setBoolean(7, usuario.isAtivo());
+            stmt.setInt(8, usuario.getId());
             stmt.executeUpdate();
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
@@ -69,7 +69,7 @@ public class UsuarioDAO {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         try {
-            stmt = conexao.prepareStatement("");
+            stmt = conexao.prepareStatement("DELETE FROM USUARIO WHERE ID = ?");
             stmt.setInt(1, usuario.getId());
             stmt.executeUpdate();
         } finally {
@@ -82,32 +82,32 @@ public class UsuarioDAO {
         PreparedStatement stmt = null;
         ResultSet result = null;
         try {
-            stmt = conexao.prepareStatement("");
+            stmt = conexao.prepareStatement("SELECT `idMatricula`, `idValidacao`, `nome`, `idCarteira`, `idHistorico`, `idPerfil`, `ativo` FROM `usuario` WHERE `id` = ?");
             stmt.setInt(1, usuario.getId());
             stmt.executeQuery();
 
-            usuario.setAtivo(result.getBoolean(""));
+            usuario.setAtivo(result.getBoolean("ativo"));
 
             // BUSCAR CARTEIRA USUARIO
             Carteira carteira = new Carteira(0, "");
-            carteira.find(result.getInt(""));
+            carteira.find(result.getInt("idCarteira"));
             usuario.setCarteira(carteira);
 
             //BUSCA HISTORICO USUARIO
-            Historico historico = new Historico(result.getInt(""));
+            Historico historico = new Historico(result.getInt("idHistorico"));
             usuario.setHistorico(historico);
 
-            usuario.setIdMatricula(result.getInt(""));
-            usuario.setNome(result.getString(""));
+            usuario.setIdMatricula(result.getInt("idMatricula"));
+            usuario.setNome(result.getString("nome"));
 
             //BUSCAR PERFIL USUARIO
             Perfil perfil = new Perfil("", 0);
-            perfil.find(result.getInt(""));
+            perfil.find(result.getInt("idPerfil"));
             usuario.setPerfil(perfil);
 
             //BUSCAR VALIDACAO USUARIO
             Validacao validacao = new Validacao("", "");
-            validacao.find(result.getInt(""));
+            validacao.find(result.getInt("idValidacao"));
             usuario.setValidacao(validacao);
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
