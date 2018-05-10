@@ -18,6 +18,10 @@ public class Usuario implements InterfaceManipulable {
     private Perfil perfil;
     private boolean ativo;
     
+    public Usuario(){
+        
+    }
+    
     public Usuario(int idMatricula, String nome, Validacao validacao, Carteira carteira, Historico historico, Perfil perfil, boolean ativo) {
         this.idMatricula = idMatricula;
         this.nome = nome;

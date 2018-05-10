@@ -1,5 +1,6 @@
 package Models;
 
+import DAO.CardapioDAO;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -9,14 +10,18 @@ import java.util.ArrayList;
  * @author Gabriel
  */
 public class Cardapio implements InterfaceManipulable {
-
     private int id;
     private Usuario usuario;
     private Date datainicio;
     private Date datafim;
     private ArrayList<Dia> dias;
 
+    private Cardapio(){
+        dias = new ArrayList<>();
+    }
+    
     public Cardapio(Usuario usuario, Date datainicio, Date datafim) {
+        this();
         this.setDatafim(datafim);
         this.setDatainicio(datainicio);
         this.setUsuario(usuario);
@@ -86,22 +91,34 @@ public class Cardapio implements InterfaceManipulable {
 
     @Override
     public void save() throws SQLException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(usuario != null && datainicio != null && datafim != null && dias != null){
+            if(this.id == 0){
+                CardapioDAO.getInstancia().save(this);
+            }else{
+                this.update();
+            }
+        }
     }
 
     @Override
     public void update() throws SQLException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(this.id > 0){
+            CardapioDAO.getInstancia().update(this);
+        }
     }
 
     @Override
     public void find(int codigo) throws SQLException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(this.id > 0){
+            CardapioDAO.getInstancia().find(this);
+        }
     }
 
     @Override
     public void delete() throws SQLException, ClassNotFoundException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(this.id > 0){
+            CardapioDAO.getInstancia().delete(this);
+        }
     }
 
 }

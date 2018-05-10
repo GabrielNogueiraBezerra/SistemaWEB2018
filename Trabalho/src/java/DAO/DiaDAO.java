@@ -5,109 +5,95 @@
  */
 package DAO;
 
-import Models.Alimento;
-import Models.Turno;
 import conexao.ConnectionFactory;
+import java.sql.SQLException;
+import Models.Dia;
+import Models.Turno;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 
 /**
  *
  * @author Marcelo
  */
-public class TurnoDAO {
+public class DiaDAO{
     private ConnectionFactory dao = ConnectionFactory.getInstancia();
-    private static TurnoDAO instancia;
+    private static DiaDAO instancia;
 
-    public static TurnoDAO getInstancia() {
+    public static DiaDAO getInstancia() {
         if (instancia == null) {
-            instancia = new TurnoDAO();
+            instancia = new DiaDAO();
         }
 
         return instancia;
     }
     
-    public void save(Turno turno) throws SQLException, ClassNotFoundException{
+    public void save(Dia dia) throws SQLException, ClassNotFoundException{
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         
         try{
             stmt = conexao.prepareStatement("");
-            //stmt.setString(1, turno.getNomeTurno());
+            stmt.setDate(1, dia.getData());
             
             stmt.executeUpdate();
             
-            for(Alimento alimento : turno.getAlimentos()){
-                stmt = conexao.prepareStatement("");
-                stmt.setInt(1, turno.getId());
-                stmt.setInt(2, alimento.getId());
-                stmt.executeUpdate();
+            
+            for(Turno turno:dia.getTurnos()){
+                //Salvar os turnos que compõem o dia
             }
         }finally{
             ConnectionFactory.closeConnection(conexao, stmt);
         }
     }
     
-    public void update(Turno turno) throws SQLException, ClassNotFoundException{
+    public void update(Dia dia) throws SQLException, ClassNotFoundException{
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         
         try{
             stmt = conexao.prepareStatement("");
-            stmt.setInt(1, turno.getId());
-            stmt.setString(2, turno.getNomeTurno());
+            stmt.setDate(1, dia.getData());
             
             stmt.executeUpdate();
-            
-            ArrayList<Alimento> listaAlimentos = AlimentoDAO.getInstancia().getAlimentos();
-            
-            for(Alimento alimento : turno.getAlimentos()){
-                stmt = conexao.prepareStatement("");
-                
-                //if(){
-                    stmt.setInt(1, turno.getId());
-                    stmt.setInt(2, alimento.getId());
-                    stmt.executeUpdate();
-                //}
-            }
+            //Atualizar os turnos que compõem o dia
         }finally{
             ConnectionFactory.closeConnection(conexao, stmt);
         }
     }
     
-    public void find(Turno turno) throws SQLException, ClassNotFoundException{
+    public void find(Dia dia) throws SQLException, ClassNotFoundException{
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         ResultSet result = null;
         try {
             stmt = conexao.prepareStatement("");
-            stmt.setInt(1, turno.getId());
+            stmt.setInt(1, dia.getId());
             result = stmt.executeQuery();
             
             while (result.next()) {
-                turno.setNomeTurno(result.getString(""));
+                dia.setData(result.getDate(""));
                 
-                //Buscar os Alimentos que o compõem e setar no turno
+                //Buscar os Turnos que o compõem e setar no dia
             }
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
     }
     
-    public void delete(Turno turno) throws SQLException, ClassNotFoundException{
+    public void delete(Dia dia) throws SQLException, ClassNotFoundException{
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         try {
             stmt = conexao.prepareStatement("");
-            stmt.setInt(1, turno.getId());
+            stmt.setInt(1, dia.getId());
             stmt.executeUpdate();
             
-            for(Alimento alimento : turno.getAlimentos()){
-                AlimentoDAO.getInstancia().delete(alimento);
-                turno.getAlimentos().remove(alimento);
+            
+            for(Turno turno : dia.getTurnos()){
+                TurnoDAO.getInstancia().delete(turno);
+                dia.getTurnos().remove(turno);
             }
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);

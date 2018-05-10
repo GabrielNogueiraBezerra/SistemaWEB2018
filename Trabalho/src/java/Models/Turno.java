@@ -1,5 +1,6 @@
 package Models;
 
+import DAO.TurnoDAO;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -61,22 +62,34 @@ public class Turno implements InterfaceManipulable{
     
     @Override
     public void save() throws SQLException, ClassNotFoundException {
-        
+        if(nomeTurno != null && alimentos != null){
+            if(this.id == 0){
+                TurnoDAO.getInstancia().save(this);
+            }else{
+                this.update();
+            }
+        }
     }
 
     @Override
     public void update() throws SQLException, ClassNotFoundException {
-        
+        if(id > 0){
+            TurnoDAO.getInstancia().update(this);
+        }
     }
 
     @Override
     public void find(int codigo) throws SQLException, ClassNotFoundException {
-        
+        if(id > 0){
+            TurnoDAO.getInstancia().find(this);
+        }
     }
 
     @Override
     public void delete() throws SQLException, ClassNotFoundException {
-        
+        if(id > 0){
+            TurnoDAO.getInstancia().delete(this);
+        }
     }
     
     

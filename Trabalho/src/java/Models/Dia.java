@@ -1,5 +1,6 @@
 package Models;
 
+import DAO.DiaDAO;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,7 +14,12 @@ public class Dia implements InterfaceManipulable {
     private Date data;
     private ArrayList<Turno> turnos;
 
+    private Dia(){
+        turnos = new ArrayList<>();
+    }
+    
     public Dia(Date data) {
+        this();
         this.data = data;
     }
 
@@ -61,22 +67,34 @@ public class Dia implements InterfaceManipulable {
 
     @Override
     public void save() throws SQLException, ClassNotFoundException {
-        
+        if(data != null && turnos != null){
+            if(this.id == 0){
+                DiaDAO.getInstancia().save(this);
+            }else{
+                this.update();
+            }
+        }
     }
 
     @Override
     public void update() throws SQLException, ClassNotFoundException {
-        
+        if(this.id > 0){
+            DiaDAO.getInstancia().update(this);
+        }
     }
 
     @Override
     public void find(int codigo) throws SQLException, ClassNotFoundException {
-        
+        if(this.id > 0){
+            DiaDAO.getInstancia().find(this);
+        }
     }
 
     @Override
     public void delete() throws SQLException, ClassNotFoundException {
-        
+        if(this.id > 0){
+            DiaDAO.getInstancia().delete(this);
+        }
     }
 
 }

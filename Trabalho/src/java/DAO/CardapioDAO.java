@@ -5,110 +5,111 @@
  */
 package DAO;
 
-import Models.Alimento;
-import Models.Turno;
+import Models.Cardapio;
+import Models.Dia;
+import Models.Usuario;
 import conexao.ConnectionFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 /**
  *
  * @author Marcelo
  */
-public class TurnoDAO {
+public class CardapioDAO {
     private ConnectionFactory dao = ConnectionFactory.getInstancia();
-    private static TurnoDAO instancia;
+    private static CardapioDAO instancia;
 
-    public static TurnoDAO getInstancia() {
+    public static CardapioDAO getInstancia() {
         if (instancia == null) {
-            instancia = new TurnoDAO();
+            instancia = new CardapioDAO();
         }
 
         return instancia;
     }
     
-    public void save(Turno turno) throws SQLException, ClassNotFoundException{
+    public void save(Cardapio cardapio) throws SQLException, ClassNotFoundException{
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         
         try{
             stmt = conexao.prepareStatement("");
-            //stmt.setString(1, turno.getNomeTurno());
+            stmt.setInt(1, cardapio.getUsuario().getId());
+            stmt.setDate(2, cardapio.getDatainicio());
+            stmt.setDate(3, cardapio.getDatafim());
+            
             
             stmt.executeUpdate();
             
-            for(Alimento alimento : turno.getAlimentos()){
-                stmt = conexao.prepareStatement("");
-                stmt.setInt(1, turno.getId());
-                stmt.setInt(2, alimento.getId());
-                stmt.executeUpdate();
+            
+            for(Dia dia:cardapio.getDias()){
+                //Salvar os dias que compõem o cardápio
             }
         }finally{
             ConnectionFactory.closeConnection(conexao, stmt);
         }
     }
     
-    public void update(Turno turno) throws SQLException, ClassNotFoundException{
+    public void update(Cardapio cardapio) throws SQLException, ClassNotFoundException{
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         
         try{
             stmt = conexao.prepareStatement("");
-            stmt.setInt(1, turno.getId());
-            stmt.setString(2, turno.getNomeTurno());
+            stmt.setInt(1, cardapio.getUsuario().getId());
+            stmt.setDate(2, cardapio.getDatainicio());
+            stmt.setDate(3, cardapio.getDatafim());
+            
             
             stmt.executeUpdate();
             
-            ArrayList<Alimento> listaAlimentos = AlimentoDAO.getInstancia().getAlimentos();
             
-            for(Alimento alimento : turno.getAlimentos()){
-                stmt = conexao.prepareStatement("");
-                
-                //if(){
-                    stmt.setInt(1, turno.getId());
-                    stmt.setInt(2, alimento.getId());
-                    stmt.executeUpdate();
-                //}
+            for(Dia dia:cardapio.getDias()){
+                //Atualizar os dias que compõem o cardápio
             }
         }finally{
             ConnectionFactory.closeConnection(conexao, stmt);
         }
     }
     
-    public void find(Turno turno) throws SQLException, ClassNotFoundException{
+    public void find(Cardapio cardapio) throws SQLException, ClassNotFoundException{
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         ResultSet result = null;
         try {
             stmt = conexao.prepareStatement("");
-            stmt.setInt(1, turno.getId());
+            stmt.setInt(1, cardapio.getId());
             result = stmt.executeQuery();
             
             while (result.next()) {
-                turno.setNomeTurno(result.getString(""));
+                Usuario usuario = new Usuario();
+                usuario.find(result.getInt(""));
+                cardapio.setUsuario(usuario);
+                cardapio.setDatainicio(result.getDate(""));
+                cardapio.setDatafim(result.getDate(""));
                 
-                //Buscar os Alimentos que o compõem e setar no turno
+                //Buscar os Dias que o compõem e setar no cardápio
             }
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
     }
     
-    public void delete(Turno turno) throws SQLException, ClassNotFoundException{
+    public void delete(Cardapio cardapio) throws SQLException, ClassNotFoundException{
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         try {
             stmt = conexao.prepareStatement("");
-            stmt.setInt(1, turno.getId());
+            stmt.setInt(1, cardapio.getId());
             stmt.executeUpdate();
             
-            for(Alimento alimento : turno.getAlimentos()){
-                AlimentoDAO.getInstancia().delete(alimento);
-                turno.getAlimentos().remove(alimento);
+            for(Dia dia : cardapio.getDias()){
+                DiaDAO.getInstancia().delete(dia);
+                cardapio.getDias().remove(dia);
             }
+            
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
