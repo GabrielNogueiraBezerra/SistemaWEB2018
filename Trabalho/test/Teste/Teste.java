@@ -1,5 +1,6 @@
 package Teste;
 
+import Models.CategoriaAlimento;
 import Models.Perfil;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -16,7 +17,6 @@ public class Teste {
             Perfil perfil = new Perfil("", 0);
             perfil.find(2);
             perfil.delete();
-            
         } catch (SQLException ex) {
             Logger.getLogger(Teste.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {

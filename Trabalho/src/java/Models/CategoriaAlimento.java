@@ -56,7 +56,7 @@ public class CategoriaAlimento implements InterfaceManipulable{
     @Override
     public void update() throws SQLException, ClassNotFoundException {
         if(id > 0){
-            this.update();
+            CategoriaAlimentoDAO.getInstancia().update(this);
         }
     }
 

@@ -33,7 +33,7 @@ public class CategoriaAlimentoDAO {
         PreparedStatement stmt = null;
         
         try{
-            stmt = conexao.prepareStatement("");
+            stmt = conexao.prepareStatement("INSERT INTO CATEGORIA VALUES (0, ?)");
             stmt.setString(1, categoriaAlimento.getNomeCategoria());
             
             stmt.executeUpdate();
@@ -47,8 +47,9 @@ public class CategoriaAlimentoDAO {
         PreparedStatement stmt = null;
         
         try{
-            stmt = conexao.prepareStatement("");
+            stmt = conexao.prepareStatement("UPDATE CATEGORIA SET NOME = ? WHERE ID = ?");
             stmt.setString(1, categoriaAlimento.getNomeCategoria());
+            stmt.setInt(2, categoriaAlimento.getId());
             
             stmt.executeUpdate();
         }finally{
@@ -61,8 +62,8 @@ public class CategoriaAlimentoDAO {
         PreparedStatement stmt = null;
         
         try{
-            stmt = conexao.prepareStatement("");
-            stmt.setString(1, categoriaAlimento.getNomeCategoria());
+            stmt = conexao.prepareStatement("DELETE FROM CATEGORIA WHERE ID = ?");
+            stmt.setInt(1, categoriaAlimento.getId());
             
             stmt.executeUpdate();
         }finally{
@@ -76,12 +77,13 @@ public class CategoriaAlimentoDAO {
         ResultSet result = null;
         
         try{
-            stmt = conexao.prepareStatement("");
-            stmt.setString(1, categoriaAlimento.getNomeCategoria());
+            stmt = conexao.prepareStatement("SELECT NOME FROM CATEGORIA WHERE ID = ?");
+            stmt.setInt(1, categoriaAlimento.getId());
+            result = stmt.executeQuery();
             
-            stmt.executeUpdate();
-            categoriaAlimento.setId(result.getInt(""));
-            categoriaAlimento.setNomeCategoria(result.getString(""));
+            while(result.next()){
+                categoriaAlimento.setNomeCategoria(result.getString("NOME"));
+            }
             
         }finally{
             ConnectionFactory.closeConnection(conexao, stmt);
