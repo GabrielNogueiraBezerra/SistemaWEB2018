@@ -15,6 +15,10 @@ public class Item implements InterfaceManipulable {
     private Date data;
     private String periodo;
 
+    public Item(){
+        
+    }
+    
     public Item(int idHistorico, Date data, String periodo) {
         this.idHistorico = idHistorico;
         this.data = data;

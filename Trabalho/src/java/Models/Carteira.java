@@ -13,6 +13,10 @@ public class Carteira implements InterfaceManipulable {
     private float valorSaldo;
     private String validade;
 
+    public Carteira(){
+        
+    }
+    
     public Carteira(float valorSaldo, String validade) {
         this.setValidade(validade);
         this.setValorSaldo(valorSaldo);

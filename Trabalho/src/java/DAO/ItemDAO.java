@@ -29,10 +29,9 @@ public class ItemDAO {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         try {
-            stmt = conexao.prepareStatement("INSERT INTO ITEMHISTORICO (PERIODO, IDHISTORICO, DATA) VALUES (?,?,?)");
+            stmt = conexao.prepareStatement("INSERT INTO ITEMHISTORICO (PERIODO, DATA) VALUES (?,?)");
             stmt.setString(1, item.getPeriodo());
-            stmt.setInt(2, item.getIdHistorico());
-            stmt.setDate(3, item.getData());
+            stmt.setDate(2, item.getData());
             stmt.executeUpdate();
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
@@ -43,11 +42,10 @@ public class ItemDAO {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         try {
-            stmt = conexao.prepareStatement("UPDATE ITEMHISTORICO SET PERIODO = ?, IDHISTORICO = ?, DATA = ? WHERE ID = ?");
+            stmt = conexao.prepareStatement("UPDATE ITEMHISTORICO SET PERIODO = ?, DATA = ? WHERE ID = ?");
             stmt.setString(1, item.getPeriodo());
-            stmt.setInt(2, item.getIdHistorico());
-            stmt.setDate(3, item.getData());
-            stmt.setInt(4, item.getId());
+            stmt.setDate(2, item.getData());
+            stmt.setInt(3, item.getId());
             stmt.executeUpdate();
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
@@ -71,14 +69,14 @@ public class ItemDAO {
         PreparedStatement stmt = null;
         ResultSet result = null;
         try {
-            stmt = conexao.prepareStatement("SELECT DATA, IDHISTORICO, PERIODO WHERE ID = ?");
+            stmt = conexao.prepareStatement("SELECT DATA, PERIODO FROM ITEMHISTORICO WHERE ID = ?");
             stmt.setInt(1, item.getId());
-            stmt.executeQuery();
-
-            item.setData(result.getDate("DATA"));
-            item.setIdHistorico(result.getInt("IDHISTORICO"));
-            item.setPeriodo(result.getString("PERIODO"));
-
+            result = stmt.executeQuery();
+            
+            while(result.next()){
+                item.setData(result.getDate("DATA"));
+                item.setPeriodo(result.getString("PERIODO"));
+            }
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
@@ -89,7 +87,7 @@ public class ItemDAO {
         PreparedStatement stmt = null;
         ResultSet result = null;
         try {
-            stmt = conexao.prepareStatement("SELECT ID, IDHISTORICO, DATA, PERIODO WHERE IDHISTORICO = ?");
+            stmt = conexao.prepareStatement("SELECT ID, IDHISTORICO, DATA, PERIODO FROM ITEMHISTORICO WHERE IDHISTORICO = ?");
             stmt.setInt(1, historico.getId());
             stmt.executeQuery();
 

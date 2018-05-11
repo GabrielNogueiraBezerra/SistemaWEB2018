@@ -70,10 +70,12 @@ public class CarteiraDAO {
         try {
             stmt = conexao.prepareStatement("SELECT VALIDADE, SALDO FROM CARTEIRA WHERE ID = ?");
             stmt.setInt(1, carteira.getId());
-            stmt.executeQuery();
-
-            carteira.setValidade(result.getString("VALIDADE"));
-            carteira.setValorSaldo(result.getFloat("SALDO"));
+            result = stmt.executeQuery();
+            
+            while(result.next()){
+                carteira.setValidade(result.getString("VALIDADE"));
+                carteira.setValorSaldo(result.getFloat("SALDO"));
+            }
 
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
