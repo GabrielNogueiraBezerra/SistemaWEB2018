@@ -89,7 +89,7 @@ public class ItemDAO {
         PreparedStatement stmt = null;
         ResultSet result = null;
         try {
-            stmt = conexao.prepareStatement("SELECT ID, IDHISTORICO, DATA, PERIODO WHERE ID = ?");
+            stmt = conexao.prepareStatement("SELECT ID, IDHISTORICO, DATA, PERIODO WHERE IDHISTORICO = ?");
             stmt.setInt(1, historico.getId());
             stmt.executeQuery();
 

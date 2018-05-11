@@ -17,6 +17,7 @@ import java.sql.SQLException;
  * @author Marcelo Morera
  */
 public class CategoriaAlimentoDAO {
+
     private ConnectionFactory dao = ConnectionFactory.getInstancia();
     private static CategoriaAlimentoDAO instancia;
 
@@ -27,66 +28,88 @@ public class CategoriaAlimentoDAO {
 
         return instancia;
     }
-    
-    public void save(CategoriaAlimento categoriaAlimento) throws SQLException, ClassNotFoundException{
+
+    public void save(CategoriaAlimento categoriaAlimento) throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
-        
-        try{
+
+        try {
             stmt = conexao.prepareStatement("INSERT INTO CATEGORIA VALUES (0, ?)");
             stmt.setString(1, categoriaAlimento.getNomeCategoria());
-            
+
             stmt.executeUpdate();
-        }finally{
+
+            categoriaAlimento.setId(this.find());
+        } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
     }
-    
-    public void update(CategoriaAlimento categoriaAlimento) throws SQLException, ClassNotFoundException{
+
+    public void update(CategoriaAlimento categoriaAlimento) throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
-        
-        try{
+
+        try {
             stmt = conexao.prepareStatement("UPDATE CATEGORIA SET NOME = ? WHERE ID = ?");
             stmt.setString(1, categoriaAlimento.getNomeCategoria());
             stmt.setInt(2, categoriaAlimento.getId());
-            
+
             stmt.executeUpdate();
-        }finally{
+        } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
     }
-    
-    public void delete(CategoriaAlimento categoriaAlimento) throws SQLException, ClassNotFoundException{
+
+    public void delete(CategoriaAlimento categoriaAlimento) throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
-        
-        try{
+
+        try {
             stmt = conexao.prepareStatement("DELETE FROM CATEGORIA WHERE ID = ?");
             stmt.setInt(1, categoriaAlimento.getId());
-            
+
             stmt.executeUpdate();
-        }finally{
+        } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
     }
-    
-    public void find(CategoriaAlimento categoriaAlimento) throws SQLException, ClassNotFoundException{
+
+    public void find(CategoriaAlimento categoriaAlimento) throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         ResultSet result = null;
-        
-        try{
+
+        try {
             stmt = conexao.prepareStatement("SELECT NOME FROM CATEGORIA WHERE ID = ?");
             stmt.setInt(1, categoriaAlimento.getId());
             result = stmt.executeQuery();
-            
-            while(result.next()){
+
+            while (result.next()) {
                 categoriaAlimento.setNomeCategoria(result.getString("NOME"));
             }
-            
-        }finally{
+
+        } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
+        }
+    }
+
+    private int find() throws SQLException, ClassNotFoundException {
+        Connection conexao = dao.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet result = null;
+        int resultado = 0;
+
+        try {
+            stmt = conexao.prepareStatement("SELECT AUTO_INCREMENT as id FROM information_schema.tables WHERE table_name = 'categoria' AND table_schema = 'bancoweb'");
+            result = stmt.executeQuery();
+
+            while (result.next()) {
+                resultado = result.getInt("id");
+            }
+
+        } finally {
+            ConnectionFactory.closeConnection(conexao, stmt);
+            return resultado - 1;
         }
     }
 }
