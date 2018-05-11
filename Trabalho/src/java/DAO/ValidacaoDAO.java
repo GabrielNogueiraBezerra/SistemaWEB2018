@@ -70,10 +70,12 @@ public class ValidacaoDAO {
         try {
             stmt = conexao.prepareStatement("SELECT LOGIN, SENHA FROM VALIDACAO WHERE ID = ?");
             stmt.setInt(1, validacao.getId());
-            stmt.executeQuery();
-
-            validacao.setLogin(result.getString("LOGIN"));
-            validacao.setSenha(result.getString("SENHA"));
+            result = stmt.executeQuery();
+            
+            while(result.next()){
+                validacao.setLogin(result.getString("LOGIN"));
+                validacao.setSenha(result.getString("SENHA"));
+            }
 
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);

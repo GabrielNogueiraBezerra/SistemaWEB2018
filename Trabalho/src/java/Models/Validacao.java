@@ -13,6 +13,10 @@ public class Validacao implements InterfaceManipulable {
     private String login;
     private String senha;
 
+    public Validacao(){
+        
+    }
+    
     public Validacao(String login, String senha) {
         this.login = login;
         this.senha = senha;
@@ -77,6 +81,7 @@ public class Validacao implements InterfaceManipulable {
     @Override
     public void find(int codigo) throws SQLException, ClassNotFoundException {
         if (codigo > 0) {
+            this.id = codigo;
             ValidacaoDAO.getInstancia().find(this);
         }
     }

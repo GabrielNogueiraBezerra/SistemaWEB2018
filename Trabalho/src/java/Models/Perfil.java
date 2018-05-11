@@ -13,6 +13,10 @@ public class Perfil implements InterfaceManipulable {
     private String descricao;
     private float valor;
 
+    public Perfil(){
+        
+    }
+    
     public Perfil(String descricao, float valor) {
         this.descricao = descricao;
         this.valor = valor;
