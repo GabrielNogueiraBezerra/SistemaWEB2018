@@ -6,7 +6,6 @@
 package DAO;
 
 import Models.Cardapio;
-import Models.Dia;
 import Models.Turno;
 import Models.Usuario;
 import conexao.ConnectionFactory;
