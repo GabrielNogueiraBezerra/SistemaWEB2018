@@ -14,8 +14,9 @@ public class Teste {
 
     public static void main(String[] args) {
         try {
-            Item i = new Item(0, new Date(2018, 4, 9), "asdasd");
-            i.save();
+            
+            Turno turno = new Turno();
+            turno.find(3);
             
         } catch (SQLException ex) {
             Logger.getLogger(Teste.class.getName()).log(Level.SEVERE, null, ex);
