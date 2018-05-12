@@ -43,13 +43,6 @@ public class TurnoDAO {
             stmt.executeUpdate();
 
             turno.setId(this.find());
-
-            for (Alimento alimento : turno.getAlimentos()) {
-                stmt = conexao.prepareStatement("INSERT INTO `itemalimento` VALUES (0, ?, ?)");
-                stmt.setInt(1, turno.getId());
-                stmt.setInt(2, alimento.getId());
-                stmt.executeUpdate();
-            }
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
@@ -104,12 +97,16 @@ public class TurnoDAO {
             stmt = conexao.prepareStatement("SELECT `idTurno`, `idAlimento` FROM `itemalimento` WHERE `idTurno` = ?");
             stmt.setInt(1, turno.getId());
             result = stmt.executeQuery();
+            
+            ArrayList<Alimento> alimentos = new ArrayList<Alimento>();
 
             while (result.next()) {
                 Alimento alimento = new Alimento();
                 alimento.find(result.getInt("idAlimento"));
-                turno.addAlimento(alimento);
+                alimentos.add(alimento);
             }
+            
+            turno.setAlimentos(alimentos);
 
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
