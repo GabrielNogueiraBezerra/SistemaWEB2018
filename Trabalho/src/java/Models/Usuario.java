@@ -37,7 +37,7 @@ public class Usuario implements InterfaceManipulable {
     }
     
     public void setId(int id) {
-        if (this.id > 0) {
+        if (id > 0) {
             this.id = id;
         }
     }

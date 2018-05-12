@@ -10,16 +10,17 @@ import java.util.ArrayList;
  * @author Gabriel
  */
 public class Cardapio implements InterfaceManipulable {
+
     private int id;
     private Usuario usuario;
     private Date datainicio;
     private Date datafim;
-    private ArrayList<Dia> dias;
+    private ArrayList<Turno> turnos;
 
-    private Cardapio(){
-        dias = new ArrayList<>();
+    private Cardapio() {
+        turnos = new ArrayList<>();
     }
-    
+
     public Cardapio(Usuario usuario, Date datainicio, Date datafim) {
         this();
         this.setDatafim(datafim);
@@ -67,34 +68,36 @@ public class Cardapio implements InterfaceManipulable {
         }
     }
 
-    public ArrayList<Dia> getDias() {
-        return dias;
+    public ArrayList<Turno> getTurnos() {
+        return turnos;
     }
 
-    public void setDias(ArrayList<Dia> dias) {
-        if (dias != null) {
-            this.dias = dias;
+    public void setTurnos(ArrayList<Turno> turnos) {
+        if (turnos != null) {
+            this.turnos = turnos;
         }
     }
 
-    public void addDia(Dia dia) {
-        if (dia != null) {
-            this.dias.add(dia);
+    public void addTurno(Turno turno) throws SQLException, ClassNotFoundException {
+        if (turno != null && turno.getId() > 0) {
+            CardapioDAO.getInstancia().save(this, turno);
+            this.turnos.add(turno);
         }
     }
 
-    public void removeDia(Dia dia) {
-        if (dia != null) {
-            this.dias.remove(dia);
+    public void removeTurno(Turno turno) throws SQLException, ClassNotFoundException {
+        if (turno != null && turno.getId() > 0) {
+            CardapioDAO.getInstancia().delete(this, turno);
+            this.turnos.remove(turno);
         }
     }
 
     @Override
     public void save() throws SQLException, ClassNotFoundException {
-        if(usuario != null && datainicio != null && datafim != null && dias != null){
-            if(this.id == 0){
+        if (usuario != null && datainicio != null && datafim != null && turnos != null) {
+            if (this.id == 0) {
                 CardapioDAO.getInstancia().save(this);
-            }else{
+            } else {
                 this.update();
             }
         }
@@ -102,21 +105,23 @@ public class Cardapio implements InterfaceManipulable {
 
     @Override
     public void update() throws SQLException, ClassNotFoundException {
-        if(this.id > 0){
+        if (this.id > 0) {
             CardapioDAO.getInstancia().update(this);
         }
     }
 
     @Override
     public void find(int codigo) throws SQLException, ClassNotFoundException {
-        if(this.id > 0){
+        if (codigo > 0) {
+            this.id = codigo;
+
             CardapioDAO.getInstancia().find(this);
         }
     }
 
     @Override
     public void delete() throws SQLException, ClassNotFoundException {
-        if(this.id > 0){
+        if (this.id > 0) {
             CardapioDAO.getInstancia().delete(this);
         }
     }

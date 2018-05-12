@@ -12,18 +12,18 @@ import java.sql.ResultSet;
  * @author Gabriel
  */
 public class ValidacaoDAO {
-
+    
     private ConnectionFactory dao = ConnectionFactory.getInstancia();
     private static ValidacaoDAO instancia;
-
+    
     public static ValidacaoDAO getInstancia() {
         if (instancia == null) {
             instancia = new ValidacaoDAO();
         }
-
+        
         return instancia;
     }
-
+    
     public void save(Validacao validacao) throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
@@ -32,11 +32,13 @@ public class ValidacaoDAO {
             stmt.setString(1, validacao.getLogin());
             stmt.setString(2, validacao.getSenha());
             stmt.executeUpdate();
+            
+            validacao.setId(this.find());
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
     }
-
+    
     public void update(Validacao validacao) throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
@@ -50,7 +52,7 @@ public class ValidacaoDAO {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
     }
-
+    
     public void delete(Validacao validacao) throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
@@ -62,7 +64,7 @@ public class ValidacaoDAO {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
     }
-
+    
     public void find(Validacao validacao) throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
@@ -72,13 +74,33 @@ public class ValidacaoDAO {
             stmt.setInt(1, validacao.getId());
             result = stmt.executeQuery();
             
-            while(result.next()){
+            while (result.next()) {
                 validacao.setLogin(result.getString("LOGIN"));
                 validacao.setSenha(result.getString("SENHA"));
             }
-
+            
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
+        }
+    }
+    
+    private int find() throws SQLException, ClassNotFoundException {
+        Connection conexao = dao.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet result = null;
+        int resultado = 0;
+        
+        try {
+            stmt = conexao.prepareStatement("SELECT AUTO_INCREMENT as id FROM information_schema.tables WHERE table_name = 'validacao' AND table_schema = 'bancoweb'");
+            result = stmt.executeQuery();
+            
+            while (result.next()) {
+                resultado = result.getInt("id");
+            }
+            
+        } finally {
+            ConnectionFactory.closeConnection(conexao, stmt);
+            return resultado - 1;
         }
     }
 }

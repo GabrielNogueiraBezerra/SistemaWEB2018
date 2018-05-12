@@ -39,11 +39,13 @@ public class CardapioDAO {
 
         try {
             stmt = conexao.prepareStatement("INSERT INTO `cardapio` VALUES (0, ?, ?, ?)");
-            stmt.setInt(1, cardapio.getUsuario().getId());
-            stmt.setDate(2, cardapio.getDatainicio());
-            stmt.setDate(3, cardapio.getDatafim());
+            stmt.setDate(1, cardapio.getDatainicio());
+            stmt.setDate(2, cardapio.getDatafim());
+            stmt.setInt(3, cardapio.getUsuario().getId());
 
             stmt.executeUpdate();
+            
+            cardapio.setId(this.find());
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
@@ -73,7 +75,7 @@ public class CardapioDAO {
             stmt.setDate(1, cardapio.getDatainicio());
             stmt.setDate(2, cardapio.getDatafim());
             stmt.setInt(3, cardapio.getUsuario().getId());
-            stmt.setInt(3, cardapio.getId());
+            stmt.setInt(4, cardapio.getId());
 
             stmt.executeUpdate();
         } finally {
@@ -152,6 +154,26 @@ public class CardapioDAO {
 
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
+        }
+    }
+    
+    private int find() throws SQLException, ClassNotFoundException {
+        Connection conexao = dao.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet result = null;
+        int resultado = 0;
+        
+        try {
+            stmt = conexao.prepareStatement("SELECT AUTO_INCREMENT as id FROM information_schema.tables WHERE table_name = 'cardapio' AND table_schema = 'bancoweb'");
+            result = stmt.executeQuery();
+            
+            while (result.next()) {
+                resultado = result.getInt("id");
+            }
+            
+        } finally {
+            ConnectionFactory.closeConnection(conexao, stmt);
+            return resultado - 1;
         }
     }
 }

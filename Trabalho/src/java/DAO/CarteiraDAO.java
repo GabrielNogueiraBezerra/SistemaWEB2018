@@ -32,6 +32,8 @@ public class CarteiraDAO {
             stmt.setString(1, carteira.getValidade());
             stmt.setFloat(2, carteira.getValorSaldo());
             stmt.executeUpdate();
+            
+            carteira.setId(this.find());
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
@@ -79,6 +81,26 @@ public class CarteiraDAO {
 
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
+        }
+    }
+    
+    private int find() throws SQLException, ClassNotFoundException {
+        Connection conexao = dao.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet result = null;
+        int resultado = 0;
+
+        try {
+            stmt = conexao.prepareStatement("SELECT AUTO_INCREMENT as id FROM information_schema.tables WHERE table_name = 'carteira' AND table_schema = 'bancoweb'");
+            result = stmt.executeQuery();
+
+            while (result.next()) {
+                resultado = result.getInt("id");
+            }
+
+        } finally {
+            ConnectionFactory.closeConnection(conexao, stmt);
+            return resultado - 1;
         }
     }
 }

@@ -29,10 +29,13 @@ public class ItemDAO {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         try {
-            stmt = conexao.prepareStatement("INSERT INTO ITEMHISTORICO (PERIODO, DATA) VALUES (?,?)");
+            stmt = conexao.prepareStatement("INSERT INTO ITEMHISTORICO (PERIODO, DATA, IDHISTORICO) VALUES (?,?,?)");
             stmt.setString(1, item.getPeriodo());
             stmt.setDate(2, item.getData());
+            stmt.setInt(3, item.getIdHistorico());
             stmt.executeUpdate();
+
+            item.setId(this.find());
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
@@ -72,8 +75,8 @@ public class ItemDAO {
             stmt = conexao.prepareStatement("SELECT DATA, PERIODO FROM ITEMHISTORICO WHERE ID = ?");
             stmt.setInt(1, item.getId());
             result = stmt.executeQuery();
-            
-            while(result.next()){
+
+            while (result.next()) {
                 item.setData(result.getDate("DATA"));
                 item.setPeriodo(result.getString("PERIODO"));
             }
@@ -89,7 +92,7 @@ public class ItemDAO {
         try {
             stmt = conexao.prepareStatement("SELECT ID, IDHISTORICO, DATA, PERIODO FROM ITEMHISTORICO WHERE IDHISTORICO = ?");
             stmt.setInt(1, historico.getId());
-            stmt.executeQuery();
+            result = stmt.executeQuery();
 
             while (result.next()) {
                 Item item = new Item(result.getInt("IDHISTORICO"), result.getDate("DATA"), result.getString("PERIODO"));
@@ -99,6 +102,26 @@ public class ItemDAO {
 
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
+        }
+    }
+
+    private int find() throws SQLException, ClassNotFoundException {
+        Connection conexao = dao.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet result = null;
+        int resultado = 0;
+
+        try {
+            stmt = conexao.prepareStatement("SELECT AUTO_INCREMENT as id FROM information_schema.tables WHERE table_name = 'itemhistorico' AND table_schema = 'bancoweb'");
+            result = stmt.executeQuery();
+
+            while (result.next()) {
+                resultado = result.getInt("id");
+            }
+
+        } finally {
+            ConnectionFactory.closeConnection(conexao, stmt);
+            return resultado - 1;
         }
     }
 }

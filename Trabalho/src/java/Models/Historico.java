@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class Historico {
 
     private int id;
-    private ArrayList<Item> itens;
+    private ArrayList<Item> itens = new ArrayList<Item>();
 
     public Historico(int id) throws SQLException, ClassNotFoundException {
         this.setId(id);
