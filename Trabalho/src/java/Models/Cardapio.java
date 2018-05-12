@@ -17,7 +17,7 @@ public class Cardapio implements InterfaceManipulable {
     private Date datafim;
     private ArrayList<Turno> turnos;
 
-    private Cardapio() {
+    public Cardapio() {
         turnos = new ArrayList<>();
     }
 

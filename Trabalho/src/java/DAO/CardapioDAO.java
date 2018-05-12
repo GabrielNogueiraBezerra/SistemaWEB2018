@@ -35,7 +35,7 @@ public class CardapioDAO {
     public void save(Cardapio cardapio) throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
-
+        
         try {
             stmt = conexao.prepareStatement("INSERT INTO `cardapio` VALUES (0, ?, ?, ?)");
             stmt.setDate(1, cardapio.getDatainicio());

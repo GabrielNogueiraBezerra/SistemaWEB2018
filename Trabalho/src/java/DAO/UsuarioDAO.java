@@ -86,31 +86,33 @@ public class UsuarioDAO {
         try {
             stmt = conexao.prepareStatement("SELECT `idMatricula`, `idValidacao`, `nome`, `idCarteira`, `idHistorico`, `idPerfil`, `ativo` FROM `usuario` WHERE `id` = ?");
             stmt.setInt(1, usuario.getId());
-            stmt.executeQuery();
+            result = stmt.executeQuery();
             
-            usuario.setAtivo(result.getBoolean("ativo"));
+            while(result.next()){
+                usuario.setAtivo(result.getBoolean("ativo"));
 
-            // BUSCAR CARTEIRA USUARIO
-            Carteira carteira = new Carteira(0, "");
-            carteira.find(result.getInt("idCarteira"));
-            usuario.setCarteira(carteira);
+                // BUSCAR CARTEIRA USUARIO
+                Carteira carteira = new Carteira(0, "");
+                carteira.find(result.getInt("idCarteira"));
+                usuario.setCarteira(carteira);
 
-            //BUSCA HISTORICO USUARIO
-            Historico historico = new Historico(result.getInt("idHistorico"));
-            usuario.setHistorico(historico);
-            
-            usuario.setIdMatricula(result.getInt("idMatricula"));
-            usuario.setNome(result.getString("nome"));
+                //BUSCA HISTORICO USUARIO
+                Historico historico = new Historico(result.getInt("idHistorico"));
+                usuario.setHistorico(historico);
 
-            //BUSCAR PERFIL USUARIO
-            Perfil perfil = new Perfil("", 0);
-            perfil.find(result.getInt("idPerfil"));
-            usuario.setPerfil(perfil);
+                usuario.setIdMatricula(result.getInt("idMatricula"));
+                usuario.setNome(result.getString("nome"));
 
-            //BUSCAR VALIDACAO USUARIO
-            Validacao validacao = new Validacao("", "");
-            validacao.find(result.getInt("idValidacao"));
-            usuario.setValidacao(validacao);
+                //BUSCAR PERFIL USUARIO
+                Perfil perfil = new Perfil("", 0);
+                perfil.find(result.getInt("idPerfil"));
+                usuario.setPerfil(perfil);
+
+                //BUSCAR VALIDACAO USUARIO
+                Validacao validacao = new Validacao("", "");
+                validacao.find(result.getInt("idValidacao"));
+                usuario.setValidacao(validacao);
+            }
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
         }

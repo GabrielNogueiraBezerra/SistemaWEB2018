@@ -131,7 +131,7 @@ public class Usuario implements InterfaceManipulable {
     @Override
     public void find(int codigo) throws SQLException, ClassNotFoundException {
         if (codigo > 0) {
-            this.id = 0;
+            this.id = codigo;
             
             UsuarioDAO.getInstancia().find(this);
         }
