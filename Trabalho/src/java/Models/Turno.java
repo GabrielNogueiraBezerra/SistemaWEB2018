@@ -1,5 +1,6 @@
 package Models;
 
+import interfaces.InterfaceManipulable;
 import DAO.TurnoDAO;
 import java.sql.Date;
 import java.sql.SQLException;

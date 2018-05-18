@@ -1,5 +1,6 @@
 package Models;
 
+import interfaces.InterfaceManipulable;
 import DAO.AlimentoDAO;
 import java.sql.SQLException;
 

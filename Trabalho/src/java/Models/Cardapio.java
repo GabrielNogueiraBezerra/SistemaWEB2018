@@ -1,5 +1,6 @@
 package Models;
 
+import interfaces.InterfaceManipulable;
 import DAO.CardapioDAO;
 import java.sql.Date;
 import java.sql.SQLException;
