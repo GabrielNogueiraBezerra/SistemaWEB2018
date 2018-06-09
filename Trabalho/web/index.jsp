@@ -12,8 +12,19 @@
         <title></title>
     </head>
     <body>
-        <%
-            response.sendRedirect("/Trabalho/Pagina");
-        %>
+        <h1>
+            Autenticação
+        </h1>
+        <form method="post" action="/Trabalho/Pagina?comando=Logar">
+            <label>
+                Login:<input type="text" name="login">
+            </label><br/><br/>
+            <label>
+                Senha:<input type="text" name="senha">
+            </label><br/><br/>
+            <input type="submit" value="Entrar">
+        </form>
+        <hr/>
+        <h1>Cardápio</h1>
     </body>
 </html>
