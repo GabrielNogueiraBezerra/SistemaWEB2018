@@ -20,7 +20,7 @@
                 Login:<input type="text" name="login">
             </label><br/><br/>
             <label>
-                Senha:<input type="text" name="senha">
+                Senha:<input type="password" name="senha">
             </label><br/><br/>
             <input type="submit" value="Entrar">
         </form>
