@@ -22,8 +22,6 @@ public class Teste {
             Perfil p = new Perfil();
             p.find(4);
             
-            Validacao v = new Validacao();
-            v.find(13);
             
             Carteira c = new Carteira();
             c.find(16);

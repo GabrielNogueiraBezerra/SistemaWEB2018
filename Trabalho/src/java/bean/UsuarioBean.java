@@ -8,7 +8,7 @@ package bean;
 import Models.Carteira;
 import Models.Historico;
 import Models.Perfil;
-import Models.Validacao;
+
 
 /**
  *
@@ -18,7 +18,8 @@ public class UsuarioBean {
     private int id;
     private int idMatricula;
     private String nome;
-    private Validacao validacao;
+    private String login;
+    private String senha;
     private Carteira carteira;
     private Historico historico;
     private Perfil perfil;
@@ -48,13 +49,23 @@ public class UsuarioBean {
         this.nome = nome;
     }
 
-    public Validacao getValidacao() {
-        return validacao;
+    public String getLogin() {
+        return login;
     }
 
-    public void setValidacao(Validacao validacao) {
-        this.validacao = validacao;
+    public void setLogin(String login) {
+        this.login = login;
     }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    
 
     public Carteira getCarteira() {
         return carteira;

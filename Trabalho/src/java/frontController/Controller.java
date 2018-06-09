@@ -25,7 +25,7 @@ public class Controller extends HttpServlet {
         Comando comando = new NotFounded();
 
         try {
-            if(request.getSession().getAttribute("user") == null){
+            if(request.getSession().getAttribute("usuarioLogadoSessao") == null){
                 
                 //Comandos do if abaixo são executados sem precisar estar logado
                 if(request.getParameter("comando").equals("Logar")){

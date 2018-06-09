@@ -13,7 +13,8 @@ public class Usuario implements InterfaceManipulable {
     private int id;
     private int idMatricula;
     private String nome;
-    private Validacao validacao;
+    private String login;
+    private String senha;
     private Carteira carteira;
     private Historico historico;
     private Perfil perfil;
@@ -23,14 +24,33 @@ public class Usuario implements InterfaceManipulable {
         
     }
     
-    public Usuario(int idMatricula, String nome, Validacao validacao, Carteira carteira, Historico historico, Perfil perfil, boolean ativo) {
+    public Usuario(int idMatricula, String nome, String login, String senha, Carteira carteira, Historico historico, Perfil perfil, boolean ativo) {
         this.idMatricula = idMatricula;
         this.nome = nome;
-        this.validacao = validacao;
+        this.login = login;
+        this.senha = senha;
         this.carteira = carteira;
         this.historico = historico;
         this.perfil = perfil;
         this.ativo = ativo;
+    }
+    
+    public String getLogin(){
+        return this.login;
+    }
+    
+    public void setLogin(String login){
+        if(login != null){
+            this.login = login;
+        }
+    }
+    
+    public String getSenha(){
+        return this.senha;
+    }
+    
+    public void setSenha(String senha){
+        this.senha = senha;
     }
     
     public int getId() {
@@ -63,15 +83,6 @@ public class Usuario implements InterfaceManipulable {
         }
     }
     
-    public Validacao getValidacao() {
-        return validacao;
-    }
-    
-    public void setValidacao(Validacao validacao) {
-        if (validacao != null) {
-            this.validacao = validacao;
-        }
-    }
     
     public Carteira getCarteira() {
         return carteira;
@@ -113,7 +124,7 @@ public class Usuario implements InterfaceManipulable {
     
     @Override
     public void save() throws SQLException, ClassNotFoundException {
-        if (this.carteira != null && this.idMatricula > 0 && this.nome != null && this.perfil != null && this.validacao != null) {
+        if (this.carteira != null && this.idMatricula > 0 && this.nome != null && this.perfil != null && this.login != null && this.senha != null) {
             if (this.id == 0) {
                 UsuarioDAO.getInstancia().save(this);
             } else {
