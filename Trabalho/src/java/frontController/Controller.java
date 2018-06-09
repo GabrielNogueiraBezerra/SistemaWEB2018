@@ -8,6 +8,7 @@ package frontController;
 import comando.NotFounded;
 import interfaces.Comando;
 import java.io.IOException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -24,11 +25,18 @@ public class Controller extends HttpServlet {
         Comando comando = new NotFounded();
 
         try {
-            //if(request.getSession().getAttribute("login") == null){
+            if(request.getSession().getAttribute("user") == null){
                 
-            //}else{
-            comando = (Comando) Class.forName("comando." + request.getParameter("comando")).newInstance();
-            //}
+                //Comandos do if abaixo são executados sem precisar estar logado
+                if(request.getParameter("comando").equals("Logar")){
+                    comando = (Comando) Class.forName("comando." + request.getParameter("comando")).newInstance();
+                }else{
+                    //Se n for nenhum comando permitido fazer sem estar logado
+                    //Redireciona para alguma pagina
+                }
+            }else{
+                comando = (Comando) Class.forName("comando." + request.getParameter("comando")).newInstance();
+            }
             
         } catch (InstantiationException ex) {
             ex.printStackTrace();
