@@ -4,6 +4,7 @@ import interfaces.InterfaceManipulable;
 import DAO.CardapioDAO;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -41,6 +42,20 @@ public class Cardapio implements InterfaceManipulable {
 
     public Usuario getUsuario() {
         return usuario;
+    }
+
+    public Turno retornaTurno(String data) {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+        if (data != null) {
+            for (Turno turno : this.getTurnos()) {
+                if (df.format(turno.getDate()).equals(data)) {
+                    return turno;
+                }
+            }
+        }
+
+        return null;
     }
 
     public void setUsuario(Usuario usuario) {
@@ -117,6 +132,12 @@ public class Cardapio implements InterfaceManipulable {
             this.id = codigo;
 
             CardapioDAO.getInstancia().find(this);
+        }
+    }
+
+    public void find(String data) throws SQLException, ClassNotFoundException {
+        if (data != null) {
+            CardapioDAO.getInstancia().find(this, data);
         }
     }
 

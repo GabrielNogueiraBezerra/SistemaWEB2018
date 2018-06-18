@@ -10,6 +10,7 @@ import Models.Turno;
 import Models.Usuario;
 import conexao.ConnectionFactory;
 import java.sql.Connection;
+import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -32,10 +33,14 @@ public class CardapioDAO {
         return instancia;
     }
 
+    public CardapioDAO() {
+        super();
+    }
+
     public void save(Cardapio cardapio) throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
-        
+
         try {
             stmt = conexao.prepareStatement("INSERT INTO `cardapio` VALUES (0, ?, ?, ?)");
             stmt.setDate(1, cardapio.getDatainicio());
@@ -43,7 +48,7 @@ public class CardapioDAO {
             stmt.setInt(3, cardapio.getUsuario().getId());
 
             stmt.executeUpdate();
-            
+
             cardapio.setId(this.find());
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
@@ -77,6 +82,43 @@ public class CardapioDAO {
             stmt.setInt(4, cardapio.getId());
 
             stmt.executeUpdate();
+        } finally {
+            ConnectionFactory.closeConnection(conexao, stmt);
+        }
+    }
+
+    public void find(Cardapio cardapio, String data) throws SQLException, ClassNotFoundException {
+        Connection conexao = dao.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet result = null;
+        try {
+            stmt = conexao.prepareStatement("SELECT * FROM `cardapio` WHERE ? BETWEEN datainicio and datafim");
+            stmt.setString(1, data);
+            result = stmt.executeQuery();
+
+            while (result.next()) {
+                Usuario usuario = new Usuario();
+                usuario.find(result.getInt("idusuario"));
+                cardapio.setId(result.getInt("id"));
+                cardapio.setUsuario(usuario);
+                cardapio.setDatainicio(result.getDate("datainicio"));
+                cardapio.setDatafim(result.getDate("datafim"));
+            }
+
+            stmt = conexao.prepareStatement("SELECT `idTurno`, `idCardapio` FROM `turnocardapio` WHERE `idCardapio` = ?");
+            stmt.setInt(1, cardapio.getId());
+            result = stmt.executeQuery();
+
+            ArrayList<Turno> turnos = new ArrayList<Turno>();
+
+            while (result.next()) {
+                Turno turno = new Turno();
+                turno.find(result.getInt("idTurno"));
+                turnos.add(turno);
+            }
+
+            cardapio.setTurnos(turnos);
+
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
@@ -155,21 +197,21 @@ public class CardapioDAO {
             ConnectionFactory.closeConnection(conexao, stmt);
         }
     }
-    
+
     private int find() throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         ResultSet result = null;
         int resultado = 0;
-        
+
         try {
             stmt = conexao.prepareStatement("SELECT AUTO_INCREMENT as id FROM information_schema.tables WHERE table_name = 'cardapio' AND table_schema = 'bancoweb'");
             result = stmt.executeQuery();
-            
+
             while (result.next()) {
                 resultado = result.getInt("id");
             }
-            
+
         } finally {
             ConnectionFactory.closeConnection(conexao, stmt);
             return resultado - 1;

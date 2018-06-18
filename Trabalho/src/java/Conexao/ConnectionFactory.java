@@ -25,6 +25,10 @@ public class ConnectionFactory {
         }
         return instancia;
     }
+    
+    public ConnectionFactory(){
+        super();
+    }
 
     public Connection getConnection() {
         try {

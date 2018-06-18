@@ -16,13 +16,29 @@
         <%
             Usuario usuarioLogadoSessao = (Usuario) session.getAttribute("usuarioLogadoSessao");
         %>
-        <h1>Menu</h1>
+        <h3><a href="/Trabalho?comando=Index">
+                Pagina Inicial
+            </a></h3>
         <h3>
-            Usuario: <%=usuarioLogadoSessao.getNome() %>
+            Usuario: <%=usuarioLogadoSessao.getNome()%>
         </h3>
-        <form method="post" action="/Trabalho/Pagina?comando=Sair">
-            <input type="submit" value="Sair">
-        </form>
+        <a href="/Trabalho?comando=Sair">
+            Sair
+        </a>
         <hr/>
+
+        <h1>Menu</h1>
+        <%
+            Usuario usuario = (Usuario) session.getAttribute("usuarioLogadoSessao");
+            if (usuario != null) {
+                if (usuario.getPerfil().getDescricao().equals("ADMINISTRADOR")) {
+
+        %>
+        <a href="/Trabalho/Pagina?comando=CadastrarCategoria"> Categorias </a><br>
+        <a href="/Trabalho/Pagina?comando=CadastrarAlimentos"> Alimentos </a><br>
+        <a href="#"> Cardapio </a><br>
+        <%                }
+            }
+        %>
     </body>
 </html>

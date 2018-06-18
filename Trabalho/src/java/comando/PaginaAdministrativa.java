@@ -5,12 +5,7 @@
  */
 package comando;
 
-import DAO.UsuarioDAO;
-import Models.Usuario;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -18,30 +13,23 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Marcelo
+ * @author aluno
  */
-public class Logar implements interfaces.Comando {
+public class PaginaAdministrativa implements interfaces.Comando {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        String login = request.getParameter("login");
-        String senha = request.getParameter("senha");
-
         try {
-            Usuario usuario = UsuarioDAO.getInstancia().logar(login, senha);
-
-            if (usuario != null) {
-                request.getSession().setAttribute("usuarioLogadoSessao", usuario);
+            if (request.getSession().getAttribute("usuarioLogadoSessao") != null) {
                 RequestDispatcher rd = request.getRequestDispatcher("menu.jsp");
                 rd.forward(request, response);
             } else {
                 RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
                 rd.forward(request, response);
             }
-        } catch (SQLException | ClassNotFoundException | ServletException | IOException ex) {
-            Logger.getLogger(Logar.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException | ServletException e) {
+            e.printStackTrace();
         }
-
     }
 
 }

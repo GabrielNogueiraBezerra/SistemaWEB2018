@@ -11,12 +11,10 @@ import java.sql.SQLException;
 public class Usuario implements InterfaceManipulable {
     
     private int id;
-    private int idMatricula;
     private String nome;
     private String login;
     private String senha;
     private Carteira carteira;
-    private Historico historico;
     private Perfil perfil;
     private boolean ativo;
     
@@ -24,13 +22,11 @@ public class Usuario implements InterfaceManipulable {
         
     }
     
-    public Usuario(int idMatricula, String nome, String login, String senha, Carteira carteira, Historico historico, Perfil perfil, boolean ativo) {
-        this.idMatricula = idMatricula;
+    public Usuario(int idMatricula, String nome, String login, String senha, Carteira carteira, Perfil perfil, boolean ativo) {
         this.nome = nome;
         this.login = login;
         this.senha = senha;
         this.carteira = carteira;
-        this.historico = historico;
         this.perfil = perfil;
         this.ativo = ativo;
     }
@@ -63,16 +59,6 @@ public class Usuario implements InterfaceManipulable {
         }
     }
     
-    public int getIdMatricula() {
-        return idMatricula;
-    }
-    
-    public void setIdMatricula(int idMatricula) {
-        if (idMatricula > 0) {
-            this.idMatricula = idMatricula;
-        }
-    }
-    
     public String getNome() {
         return nome;
     }
@@ -91,16 +77,6 @@ public class Usuario implements InterfaceManipulable {
     public void setCarteira(Carteira carteira) {
         if (carteira != null) {
             this.carteira = carteira;
-        }
-    }
-    
-    public Historico getHistorico() {
-        return historico;
-    }
-    
-    public void setHistorico(Historico historico) {
-        if (historico != null) {
-            this.historico = historico;
         }
     }
     
@@ -124,7 +100,7 @@ public class Usuario implements InterfaceManipulable {
     
     @Override
     public void save() throws SQLException, ClassNotFoundException {
-        if (this.carteira != null && this.idMatricula > 0 && this.nome != null && this.perfil != null && this.login != null && this.senha != null) {
+        if (this.carteira != null && this.nome != null && this.perfil != null && this.login != null && this.senha != null) {
             if (this.id == 0) {
                 UsuarioDAO.getInstancia().save(this);
             } else {

@@ -3,6 +3,7 @@ package Models;
 import interfaces.InterfaceManipulable;
 import DAO.CarteiraDAO;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -13,11 +14,12 @@ public class Carteira implements InterfaceManipulable {
     private int id;
     private float valorSaldo;
     private String validade;
+    private ArrayList<Transacao> transacoes = new ArrayList<>();
 
-    public Carteira(){
-        
+    public Carteira() {
+
     }
-    
+
     public Carteira(float valorSaldo, String validade) {
         this.setValidade(validade);
         this.setValorSaldo(valorSaldo);
@@ -53,6 +55,16 @@ public class Carteira implements InterfaceManipulable {
         }
     }
 
+    public ArrayList<Transacao> getTransacoes() {
+        return transacoes;
+    }
+
+    public void setTransacoes(ArrayList<Transacao> transacoes) {
+        if (transacoes != null) {
+            this.transacoes = transacoes;
+        }
+    }
+
     @Override
     public void save() throws SQLException, ClassNotFoundException {
         if (this.validade != null && this.valorSaldo >= 0.0) {
@@ -73,16 +85,16 @@ public class Carteira implements InterfaceManipulable {
 
     @Override
     public void find(int codigo) throws SQLException, ClassNotFoundException {
-        if(codigo > 0){
+        if (codigo > 0) {
             this.id = codigo;
-            
+
             CarteiraDAO.getInstancia().find(this);
         }
     }
 
     @Override
     public void delete() throws SQLException, ClassNotFoundException {
-        if(this.id > 0){
+        if (this.id > 0) {
             CarteiraDAO.getInstancia().delete(this);
         }
     }

@@ -133,25 +133,28 @@ public class AlimentoDAO {
         }
     }
 
-    public ArrayList<Alimento> getAlimentos() throws SQLException, ClassNotFoundException {
+    public ArrayList<Alimento> buscarTodos() throws SQLException, ClassNotFoundException {
         Connection conexao = dao.getConnection();
         PreparedStatement stmt = null;
         ResultSet result = null;
         ArrayList<Alimento> alimentos = new ArrayList<>();
 
         try {
-            stmt = conexao.prepareStatement("SELECT `idCategoria`, `nome`, `fibras`, `carboidratos`, `calorias` FROM `alimento`");
+            stmt = conexao.prepareStatement("SELECT `id`, `idCategoria`, `nome`, `fibras`, `carboidratos`, `calorias` FROM `alimento` order by id");
+
+            result = stmt.executeQuery();
+
             while (result.next()) {
                 Alimento alimento = new Alimento();
 
-                alimento.setId(result.getInt(""));
-                alimento.setNome(result.getString(""));
-                alimento.setQuantidadeCalorias(result.getFloat(""));
-                alimento.setQuantidadeCarboidratos(result.getFloat(""));
-                alimento.setQuantidadeFibras(result.getFloat(""));
+                alimento.setId(result.getInt("id"));
+                alimento.setNome(result.getString("nome"));
+                alimento.setQuantidadeCalorias(result.getFloat("calorias"));
+                alimento.setQuantidadeCarboidratos(result.getFloat("carboidratos"));
+                alimento.setQuantidadeFibras(result.getFloat("fibras"));
 
                 CategoriaAlimento categoria = new CategoriaAlimento();
-                categoria.find(result.getInt(""));
+                categoria.find(result.getInt("idCategoria"));
                 alimento.setCategoriaAlimento(categoria);
                 alimentos.add(alimento);
             }

@@ -5,6 +5,7 @@
  */
 package frontController;
 
+import comando.Index;
 import comando.NotFounded;
 import interfaces.Comando;
 import java.io.IOException;
@@ -21,31 +22,25 @@ import javax.servlet.http.HttpServletResponse;
 public class Controller extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ClassNotFoundException, IOException, ServletException {
-        
+
         Comando comando = new NotFounded();
 
         try {
-            if(request.getSession().getAttribute("usuarioLogadoSessao") == null){
-                
-                //Comandos do if abaixo são executados sem precisar estar logado
-                if(request.getParameter("comando").equals("Logar")){
-                    comando = (Comando) Class.forName("comando." + request.getParameter("comando")).newInstance();
-                }else{
-                    //Se n for nenhum comando permitido fazer sem estar logado
-                    //Redireciona para alguma pagina
-                }
-            }else{
+
+            if (request.getParameter("comando") != null) {
                 comando = (Comando) Class.forName("comando." + request.getParameter("comando")).newInstance();
+            } else {
+                if (request.getSession().getAttribute("user") == null) {
+                    comando = new Index();
+                } else {
+                    RequestDispatcher rd = request.getRequestDispatcher("notFound.jsp");
+                    rd.forward(request, response);
+                }
             }
-            
-        } catch (InstantiationException ex) {
-            ex.printStackTrace();
-        } catch (IllegalAccessException ex) {
-            ex.printStackTrace();
-        } catch (ClassNotFoundException ex) {
+
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
             ex.printStackTrace();
         } finally {
-            
             comando.execute(request, response);
         }
     }
